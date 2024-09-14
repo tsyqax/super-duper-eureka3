@@ -166,6 +166,7 @@ def display_progress(message, percent, is_webui, progress=None):
 def preprocess_song(song_input, mdx_model_params, song_id, is_webui, input_type, progress=None):
     keep_orig = False
     if input_type == 'yt':
+        #if not os.path.join(song_dir, f'{os.path.splitext(os.path.basename(orig_song_path))[0]}_{voice_model}_p{pitch_change}_i{index_rate}_fr{filter_radius}_rms{rms_mix_rate}_pro{protect}_{f0_method}{"" if f0_method != "mangio-crepe" else f"_{crepe_hop_length}"}.wav'):
         display_progress('[~] Downloading song...', 0, is_webui, progress)
         song_link = song_input.split('&')[0]
         orig_song_path = yt_download(song_link)
@@ -273,18 +274,8 @@ def no_audio_effects(song_input, voice_model, pitch_change, keep_files,
                 orig_song_path, vocals_path, instrumentals_path, main_vocals_path, backup_vocals_path, main_vocals_dereverb_path = preprocess_song(song_input, mdx_model_params, song_id, is_webui, input_type, progress)
             else:
                 orig_song_path, instrumentals_path, main_vocals_dereverb_path, backup_vocals_path = paths
-
-        pitch_change = pitch_change + pitch_change_all
-        ai_vocals_path = os.path.join(song_dir, f'{os.path.splitext(os.path.basename(orig_song_path))[0]}_{voice_model}_p{pitch_change}_i{index_rate}_fr{filter_radius}_rms{rms_mix_rate}_pro{protect}_{f0_method}{"" if f0_method != "mangio-crepe" else f"_{crepe_hop_length}"}.wav')
-        ai_cover_path = os.path.join(song_dir, f'{os.path.splitext(os.path.basename(orig_song_path))[0]} ({voice_model} Ver).{output_format}')
-
-        if not os.path.exists(ai_vocals_path):
-            display_progress('[~] Converting voice using RVC...', 0.5, is_webui, progress)
-            voice_change(voice_model, main_vocals_dereverb_path, ai_vocals_path, pitch_change, f0_method, index_rate, filter_radius, rms_mix_rate, protect, crepe_hop_length, is_webui)
-
-        ai_cover_path = ai_cover_path
-
-        return ai_cover_path
+        
+        return main_vocal_path, backup_vocals_path, instrumentals_path
 
     except Exception as e:
         raise_exception(str(e), is_webui)
@@ -370,7 +361,7 @@ def song_cover_pipeline(song_input, voice_model, pitch_change, keep_files,
     except Exception as e:
         raise_exception(str(e), is_webui)
 
-def simple_voice_conversion(song_input, voice_model, pitch_change, progress=gr.Progress(), output_format):
+def simple_voice_conversion(song_input, voice_model, pitch_change, progress=gr.Progress(), output_format='mp3'):
     try:
         display_progress('[~] Starting simple voice conversion pipeline...', 0, False, progress)
 
@@ -435,11 +426,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     rvc_dirname = args.rvc_dirname
+    
     if not os.path.exists(os.path.join(rvc_models_dir, rvc_dirname)):
             raise Exception(f'The folder {os.path.join(rvc_models_dir, rvc_dirname)} does not exist.')
     
-    if args.no_apply_effect:
-        cover_path = no_audio_effects(args.song_input, rvc_dirname, args.pitch_change, args.keep_files,
+    if args.no_apply_effects:
+        vocal_path, backup_path, inst_path = no_audio_effects(args.song_input, rvc_dirname, args.pitch_change, args.keep_files,
                                          main_gain=args.main_vol, backup_gain=args.backup_vol, inst_gain=args.inst_vol,
                                          index_rate=args.index_rate, filter_radius=args.filter_radius,
                                          rms_mix_rate=args.rms_mix_rate, f0_method=args.pitch_detection_algo,
@@ -448,8 +440,17 @@ if __name__ == '__main__':
                                          reverb_rm_size=args.reverb_size, reverb_wet=args.reverb_wetness,
                                          reverb_dry=args.reverb_dryness, reverb_damping=args.reverb_damping,
                                          output_format=args.output_format)
-    elif args.simple_conversion: song_input, voice_model, pitch_change, progress=gr.Progress()
+        import os
+        os.system(f"mv \"{vocal_path}\" \"Not_Change_Vocal.{args.output_format}\"")
+        os.system(f"mv \"{backup_path}\" \"Not_Change_Backup.{args.output_format}\"")
+        os.system(f"mv \"{inst_path}\" \"Not_Change_Inst.{args.output_format}\"")
+        print(f'[*] End of NOT CHANGE') 
+    elif args.simple_conversion:
         cover_path = simple_voice_conversion(args.song_input, rvc_dirname, args.pitch_change, output_format=args.output_format)
+        import os
+        os.system(f"mv \"{cover_path}\" \"Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"")
+        print(f'[*] Cover generated at \"Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"')
+
     else:
         cover_path = song_cover_pipeline(args.song_input, rvc_dirname, args.pitch_change, args.keep_files,
                                          main_gain=args.main_vol, backup_gain=args.backup_vol, inst_gain=args.inst_vol,
@@ -460,4 +461,7 @@ if __name__ == '__main__':
                                          reverb_rm_size=args.reverb_size, reverb_wet=args.reverb_wetness,
                                          reverb_dry=args.reverb_dryness, reverb_damping=args.reverb_damping,
                                          output_format=args.output_format)
-    print(f'[+] Cover generated at {cover_path}')
+    
+        import os
+        os.system(f"mv \"{cover_path}\" \"Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"")
+        print(f'[*] Cover generated at \"Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"')
