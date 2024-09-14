@@ -275,7 +275,7 @@ def no_audio_effects(song_input, voice_model, pitch_change, keep_files,
             else:
                 orig_song_path, instrumentals_path, main_vocals_dereverb_path, backup_vocals_path = paths
         
-        return main_vocal_path, backup_vocals_path, instrumentals_path
+        return main_vocals_path, backup_vocals_path, instrumentals_path
 
     except Exception as e:
         raise_exception(str(e), is_webui)
@@ -430,7 +430,7 @@ if __name__ == '__main__':
     if not os.path.exists(os.path.join(rvc_models_dir, rvc_dirname)):
             raise Exception(f'The folder {os.path.join(rvc_models_dir, rvc_dirname)} does not exist.')
     
-    if args.no_apply_effects:
+    if not args.no_apply_effects:
         vocal_path, backup_path, inst_path = no_audio_effects(args.song_input, rvc_dirname, args.pitch_change, args.keep_files,
                                          main_gain=args.main_vol, backup_gain=args.backup_vol, inst_gain=args.inst_vol,
                                          index_rate=args.index_rate, filter_radius=args.filter_radius,
@@ -441,15 +441,15 @@ if __name__ == '__main__':
                                          reverb_dry=args.reverb_dryness, reverb_damping=args.reverb_damping,
                                          output_format=args.output_format)
         import os
-        os.system(f"mv \"{vocal_path}\" \"Not_Change_Vocal.{args.output_format}\"")
-        os.system(f"mv \"{backup_path}\" \"Not_Change_Backup.{args.output_format}\"")
-        os.system(f"mv \"{inst_path}\" \"Not_Change_Inst.{args.output_format}\"")
+        os.system(f"mv \"{vocal_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Not_Change_Vocal.{args.output_format}\"")
+        os.system(f"mv \"{backup_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Not_Change_Backup.{args.output_format}\"")
+        os.system(f"mv \"{inst_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Not_Change_Inst.{args.output_format}\"")
         print(f'[*] End of NOT CHANGE') 
     elif args.simple_conversion:
         cover_path = simple_voice_conversion(args.song_input, rvc_dirname, args.pitch_change, output_format=args.output_format)
         import os
-        os.system(f"mv \"{cover_path}\" \"Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"")
-        print(f'[*] Cover generated at \"Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"')
+        os.system(f"mv \"{cover_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"")
+        print(f'[*] Cover generated at \"/content/AICoverGen-NO-UI-en/song_output/Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"')
 
     else:
         cover_path = song_cover_pipeline(args.song_input, rvc_dirname, args.pitch_change, args.keep_files,
@@ -463,5 +463,5 @@ if __name__ == '__main__':
                                          output_format=args.output_format)
     
         import os
-        os.system(f"mv \"{cover_path}\" \"Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"")
-        print(f'[*] Cover generated at \"Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"')
+        os.system(f"mv \"{cover_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"")
+        print(f'[*] Cover generated at \"/content/AICoverGen-NO-UI-en/song_output/Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"')
