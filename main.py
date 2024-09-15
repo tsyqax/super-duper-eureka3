@@ -448,8 +448,8 @@ if __name__ == '__main__':
     elif args.simple_conversion:
         cover_path = simple_voice_conversion(args.song_input, rvc_dirname, args.pitch_change, output_format=args.output_format)
         import os
-        os.system(f"mv \"{cover_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"")
-        print(f'[*] Cover generated at \"/content/AICoverGen-NO-UI-en/song_output/Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"')
+        os.system(f"mv \"{cover_path}\" \"/content/AICoverGen-NO-UI-en/song_output/{args.rvc_dirname}_Without_MIX.{args.output_format}\"")
+        print(f'[*] Cover generated at \"/content/AICoverGen-NO-UI-en/song_output/{args.rvc_dirname}_Without_MIX.{args.output_format}\"')
 
     else:
         cover_path = song_cover_pipeline(args.song_input, rvc_dirname, args.pitch_change, args.keep_files,
@@ -463,5 +463,5 @@ if __name__ == '__main__':
                                          output_format=args.output_format)
     
         import os
-        os.system(f"mv \"{cover_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"")
-        print(f'[*] Cover generated at \"/content/AICoverGen-NO-UI-en/song_output/Infered_Voice_{args.no_apply_effects}_simple_{args.simple_conversion}.{args.output_format}\"')
+        os.system(f"mv \"{cover_path}\" \"/content/AICoverGen-NO-UI-en/song_output/{args.rvc_dirname}_Infered.{args.output_format}\"")
+        print(f'[*] Cover generated at \"/content/AICoverGen-NO-UI-en/song_output/{args.rvc_dirname}_Infered.{args.output_format}\"')
