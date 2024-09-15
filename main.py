@@ -430,7 +430,7 @@ if __name__ == '__main__':
     if not os.path.exists(os.path.join(rvc_models_dir, rvc_dirname)):
             raise Exception(f'The folder {os.path.join(rvc_models_dir, rvc_dirname)} does not exist.')
     
-    if not args.no_apply_effects:
+    if args.no_apply_effects or args.no_apply_effects is not None:
         vocal_path, backup_path, inst_path = no_audio_effects(args.song_input, rvc_dirname, args.pitch_change, args.keep_files,
                                          main_gain=args.main_vol, backup_gain=args.backup_vol, inst_gain=args.inst_vol,
                                          index_rate=args.index_rate, filter_radius=args.filter_radius,
@@ -445,6 +445,7 @@ if __name__ == '__main__':
         os.system(f"mv \"{backup_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Not_Change_Backup.{args.output_format}\"")
         os.system(f"mv \"{inst_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Not_Change_Inst.{args.output_format}\"")
         print(f'[*] End of NOT CHANGE') 
+        
     elif args.simple_conversion:
         cover_path = simple_voice_conversion(args.song_input, rvc_dirname, args.pitch_change, output_format=args.output_format)
         import os
