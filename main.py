@@ -441,6 +441,27 @@ if __name__ == '__main__':
                                          reverb_dry=args.reverb_dryness, reverb_damping=args.reverb_damping,
                                          output_format=args.output_format)
         import os
+        counter1 = 1
+        base_path1 = f'Not_Change_Vocal'
+        file_path1 = f"{base_path1}{ext}"
+        ext = f'.{args.out_put_format}'
+        while os.path.exists(file_path):
+            file_path1 = f"{base_path1}_{counter}{ext}"
+            counter1 += 1
+        base_path2 = f'Not_Change_Backup'
+        counter2 = 1
+        file_path2 = f"{base_path2}{ext}"
+        ext = f'.{args.out_put_format}'
+        while os.path.exists(file_path):
+            file_path2 = f"{base_path2}_{counter}{ext}"
+            counter2 += 1
+        base_path3 = f'Not_Change_Inst'
+        file_path3 = f"{base_path3}{ext}"
+        counter3 = 1
+        ext = f'.{args.out_put_format}'
+        while os.path.exists(file_path):
+            file_path = f"{base_path3}_{counter}{ext}"
+            counter3 += 1
         os.system(f"mv \"{vocal_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Not_Change_Vocal.{args.output_format}\"")
         os.system(f"mv \"{backup_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Not_Change_Backup.{args.output_format}\"")
         os.system(f"mv \"{inst_path}\" \"/content/AICoverGen-NO-UI-en/song_output/Not_Change_Inst.{args.output_format}\"")
@@ -449,8 +470,15 @@ if __name__ == '__main__':
     elif args.simple_conversion:
         cover_path = simple_voice_conversion(args.song_input, rvc_dirname, args.pitch_change, output_format=args.output_format)
         import os
-        os.system(f"mv \"{cover_path}\" \"/content/AICoverGen-NO-UI-en/song_output/{args.rvc_dirname}_Without_MIX.{args.output_format}\"")
-        print(f'[*] Cover generated at \"/content/AICoverGen-NO-UI-en/song_output/{args.rvc_dirname}_Without_MIX.{args.output_format}\"')
+        counter = 1
+        base_path = f'{args.rvc_dirname}_Without_MIX'
+        ext = f'.{args.out_put_format}'
+        file_path = f"{base_path}{ext}"
+        while os.path.exists(file_path):
+            file_path = f"{base_path}_{counter}{ext}"
+            counter += 1
+        os.system(f"mv \"{cover_path}\" \"{file_path}\"")
+        print(f'[*] Cover generated at \"{file_path}"')
 
     else:
         cover_path = song_cover_pipeline(args.song_input, rvc_dirname, args.pitch_change, args.keep_files,
@@ -464,5 +492,12 @@ if __name__ == '__main__':
                                          output_format=args.output_format)
     
         import os
-        os.system(f"mv \"{cover_path}\" \"/content/AICoverGen-NO-UI-en/song_output/{args.rvc_dirname}_Infered.{args.output_format}\"")
-        print(f'[*] Cover generated at \"/content/AICoverGen-NO-UI-en/song_output/{args.rvc_dirname}_Infered.{args.output_format}\"')
+        counter = 1
+        base_path = f'{args.rvc_dirname}_Infered'
+        ext = f'.{args.out_put_format}'
+        file_path = f"{base_path}{ext}"
+        while os.path.exists(file_path):
+            file_path = f"{base_path}_{counter}{ext}"
+            counter += 1
+        os.system(f"mv \"{cover_path}\" \"{file_path}\"")
+        print(f'[*] Cover generated at \"{file_path}"')
