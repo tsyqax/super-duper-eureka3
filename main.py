@@ -451,14 +451,14 @@ if __name__ == '__main__':
         base_path2 = f'Not_Change_Backup'
         counter2 = 1
         file_path2 = f"{base_path2}{ext}"
-        ext = f'.{args.out_put_format}'
+        ext = f'.{args.output_format}'
         while os.path.exists(file_path):
             file_path2 = f"{base_path2}_{counter}{ext}"
             counter2 += 1
         base_path3 = f'Not_Change_Inst'
         file_path3 = f"{base_path3}{ext}"
         counter3 = 1
-        ext = f'.{args.out_put_format}'
+        ext = f'.{args.output_format}'
         while os.path.exists(file_path):
             file_path = f"{base_path3}_{counter}{ext}"
             counter3 += 1
@@ -472,7 +472,7 @@ if __name__ == '__main__':
         import os
         counter = 1
         base_path = f'{args.rvc_dirname}_Without_MIX'
-        ext = f'.{args.out_put_format}'
+        ext = f'.{args.output_format}'
         file_path = f"{base_path}{ext}"
         while os.path.exists(file_path):
             file_path = f"{base_path}_{counter}{ext}"
