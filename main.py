@@ -165,9 +165,8 @@ def display_progress(message, percent, is_webui, progress=None):
 
 def preprocess_song(song_input, mdx_model_params, song_id, is_webui, input_type, progress=None):
     keep_orig = False
-    orig_song_path = ""
     if input_type == 'yt':
-       #if not os.path.join(song_id, f'{os.path.splitext(os.path.basename(orig_song_path))[0]}_{voice_model}_p{pitch_change}_i{index_rate}_fr{filter_radius}_rms{rms_mix_rate}_pro{protect}_{f0_method}{"" if f0_method != "mangio-crepe" else f"_{crepe_hop_length}"}.wav'):
+        #if not os.path.join(song_dir, f'{os.path.splitext(os.path.basename(orig_song_path))[0]}_{voice_model}_p{pitch_change}_i{index_rate}_fr{filter_radius}_rms{rms_mix_rate}_pro{protect}_{f0_method}{"" if f0_method != "mangio-crepe" else f"_{crepe_hop_length}"}.wav'):
         display_progress('[~] Downloading song...', 0, is_webui, progress)
         song_link = song_input.split('&')[0]
         orig_song_path = yt_download(song_link)
@@ -187,7 +186,7 @@ def preprocess_song(song_input, mdx_model_params, song_id, is_webui, input_type,
     backup_vocals_path, main_vocals_path = run_mdx(mdx_model_params, song_output_dir, os.path.join(mdxnet_models_dir, 'UVR_MDXNET_KARA_2.onnx'), vocals_path, suffix='Backup', invert_suffix='Main', denoise=True)
 
     display_progress('[~] Applying DeReverb to Vocals...', 0.3, is_webui, progress)
-    main_vocals_dereverb_path = run_mdx(mdx_model_params, song_output_dir, os.path.join(mdxnet_models_dir, 'Reverb_HQ_By_FoxJoy.onnx'), main_vocals_path, invert_suffix='DeReverb', exclude_main=True, denoise=True)
+    _, main_vocals_dereverb_path = run_mdx(mdx_model_params, song_output_dir, os.path.join(mdxnet_models_dir, 'Reverb_HQ_By_FoxJoy.onnx'), main_vocals_path, invert_suffix='DeReverb', exclude_main=True, denoise=True)
 
     return orig_song_path, vocals_path, instrumentals_path, main_vocals_path, backup_vocals_path, main_vocals_dereverb_path
 
