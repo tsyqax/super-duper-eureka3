@@ -494,7 +494,7 @@ if __name__ == '__main__':
         import os
         counter = 1
         base_path = f'{args.rvc_dirname}_Infered'
-        ext = f'.{args.out_put_format}'
+        ext = f'.{args.output_format}'
         file_path = f"{base_path}{ext}"
         while os.path.exists(file_path):
             file_path = f"{base_path}_{counter}{ext}"
