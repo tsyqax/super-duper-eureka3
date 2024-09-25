@@ -167,8 +167,8 @@ def preprocess_song(song_input, mdx_model_params, song_id, is_webui, input_type,
     keep_orig = False
     orig_song_path = ""
     if input_type == 'yt':
-        if not os.path.join(song_id, f'{os.path.splitext(os.path.basename(orig_song_path))[0]}_{voice_model}_p{pitch_change}_i{index_rate}_fr{filter_radius}_rms{rms_mix_rate}_pro{protect}_{f0_method}{"" if f0_method != "mangio-crepe" else f"_{crepe_hop_length}"}.wav'):
-            display_progress('[~] Downloading song...', 0, is_webui, progress)
+       #if not os.path.join(song_id, f'{os.path.splitext(os.path.basename(orig_song_path))[0]}_{voice_model}_p{pitch_change}_i{index_rate}_fr{filter_radius}_rms{rms_mix_rate}_pro{protect}_{f0_method}{"" if f0_method != "mangio-crepe" else f"_{crepe_hop_length}"}.wav'):
+        display_progress('[~] Downloading song...', 0, is_webui, progress)
         song_link = song_input.split('&')[0]
         orig_song_path = yt_download(song_link)
     elif input_type == 'local':
